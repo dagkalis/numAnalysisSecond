@@ -1,6 +1,10 @@
 from numpy import *
 import numpy as np
 
+import time
+
+time.time()
+
 from numpy import log as ln
 import math
 
@@ -25,14 +29,12 @@ def plotter(fun, array, x1, x2):
 
     plt.show()
 
-
-def mathFunctionCompiler():
-    print(next_element(1))
-    print(next_element(1))
-    print(next_element(1))
-    print(next_element(1))
-    print(next_element(1))
-
+def funMaker(functionString):
+    d = {}
+    new_func = functionString
+    the_code = compile(new_func, 'test', 'exec')
+    exec(the_code, d)
+    return d['next_element']
 
 
 if __name__ == '__main__':
@@ -50,13 +52,27 @@ if __name__ == '__main__':
                  -0.6981,
                  1.0045]
 
+    functionString = 'def next_element(x):\n  return x+1'
 
-    new_func = 'def next_element(x):\n  return x+1'
-    print(new_func)
-    the_code = compile(new_func, 'test', 'exec')
-    exec(the_code)
-    f = next_element
-    print(f(1))
+    f = funMaker(functionString)
+
+
+    print(f(5))
+
+
+    #     exec(new_func)
+    #
+    # timestamp2 = time.time()
+    # print ("This took %.2f seconds" % (timestamp2 - timestamp1))
+    #
+    # timestamp1 = time.time()
+
+    #
+    # timestamp2 = time.time()
+    # print("This took %.2f seconds" % (timestamp2 - timestamp1))
+
+    # f = next_element
+    # print(f(1))
 
     # print(next_element(1))
 
