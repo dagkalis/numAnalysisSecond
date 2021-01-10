@@ -23,13 +23,16 @@ def plotter(fun, array, x1, x2):
     x = np.arange(x1, x2, 0.01)
     # y = zeros(len(x))
     # plt.plot(x, y)
-    plt.scatter(array, fun(array), color="black")
+    plt.scatter(array, sin(array), color="black")
 
-    plt.plot(x, fun(x), color="orange")
+    plt.plot(x, fun(x, points, sin), color="orange")
 
     plt.show()
 
-def funMaker(functionString):
+
+# gets a python function in string and dynamically compiles it
+# returns the python function (def)
+def defMaker(functionString):
     d = {}
     new_func = functionString
     the_code = compile(new_func, 'test', 'exec')
@@ -37,31 +40,51 @@ def funMaker(functionString):
     return d['next_element']
 
 
+def Lagrange(x, points, function):
+    toReturn = 0
+    for i in range(len(points)):
+        Li = 1
+        for y in range(len(points)):
+            if y != i:
+                try:
+                    Li *= (x - points[y]) / (points[i] - points[y])
+                except:
+                    print("Error")
+                    print(i, " ", y, " ", points[i], " ", points[y])
+        toReturn += function(points[i]) * Li
+    return toReturn
+
+
 if __name__ == '__main__':
     # for i in range(10):
     #     print(round(random.uniform(-pi, pi), 4))
 
-    arrayList = [2.9193,
-                 -1.9475,
-                 -1.379,
-                 2.1096,
-                 -0.2275,
-                 0.0781,
-                 1.1325,
-                 2.7807,
-                 -0.6981,
-                 1.0045]
-
-    functionString = 'def next_element(x):\n  return x+1'
-
-    f = funMaker(functionString)
+    points = [2.9193,
+              -1.9475,
+              -1.379,
+              2.1096,
+              -0.2275,
+              0.0781,
+              1.1325,
+              2.7807,
+              -0.6981,
+              1.0045]
 
 
-    print(f(5))
 
 
-    #     exec(new_func)
+    # plotter(sin, array, -5*pi, 5*pi )
+    plotter(Lagrange, points, -1.5*pi,  1.5*pi )
+
+
+
+
+
+
+# functionString = 'def next_element(x):\n  return x+1'
     #
+    # f = defMaker(  functionString)
+
     # timestamp2 = time.time()
     # print ("This took %.2f seconds" % (timestamp2 - timestamp1))
     #
@@ -86,6 +109,5 @@ if __name__ == '__main__':
     # exec(the_code)
     # print(ty(5))
 
-    # plotter(np.sin, arrayList, -pi, pi)
 
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/
