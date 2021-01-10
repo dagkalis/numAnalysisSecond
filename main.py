@@ -40,6 +40,26 @@ def defMaker(functionString):
     return d['next_element']
 
 
+def transp(A):
+    if A is None:
+        print("no matrix")
+        return
+    # len1 = len(A)
+    # len2 = len(A[0])
+    # if len1 != len2:
+    #     print("matrix is not square")
+    #     return
+
+    transpose = np.empty(shape=[len(A[0]), len(A)], dtype=float)
+
+    for i in range(len(A)):
+       for y in range(len(A[0])):
+        transpose[y][i] = A[i][y]
+
+
+    return transpose
+
+
 def Lagrange(x, points, function):
     toReturn = 0
     for i in range(len(points)):
@@ -53,6 +73,27 @@ def Lagrange(x, points, function):
                     print(i, " ", y, " ", points[i], " ", points[y])
         toReturn += function(points[i]) * Li
     return toReturn
+
+
+def LeastSquares(x, dic, degree, fun):
+    # set A matrix, initialize with zeroes
+    # s = (len(dic), len(dic))
+    A = np.empty(shape=[len(dic), degree + 1], dtype=float)
+    b = list()
+
+    counter = 0
+    for i in dic.keys():
+        for y in range(degree + 1):
+            try:
+                A[counter][y] = i ** y
+            except:
+                print("error")
+                print(i, " ", y, i ** y)
+
+        b.append(fun(dic[i]))
+        counter += 1
+
+    return A
 
 
 if __name__ == '__main__':
@@ -70,44 +111,51 @@ if __name__ == '__main__':
               -0.6981,
               1.0045]
 
+    # pointDic = {}
+    pointDic = {-1: 1, 0: 0, 1: 0, 2: -2}
+    # for i in range(len(points)):
+    #     pointDic[points[i]] = sin(points[i])
+    #
 
+    print(LeastSquares(2, pointDic, 2, sin))
+    print ("\n\n")
+    print(transp(LeastSquares(2, pointDic, 2, sin)))
+    #
+    # for i in range(len(pointDic)):
+    #     print(i, list(pointDic.values())[i], " ")
+    #
+    #
 
-
-    # plotter(sin, array, -5*pi, 5*pi )
-    plotter(Lagrange, points, -1.5*pi,  1.5*pi )
-
-
-
-
+# plotter(Lagrange, points, -1.5*pi,  1.5*pi )
 
 
 # functionString = 'def next_element(x):\n  return x+1'
-    #
-    # f = defMaker(  functionString)
+#
+# f = defMaker(  functionString)
 
-    # timestamp2 = time.time()
-    # print ("This took %.2f seconds" % (timestamp2 - timestamp1))
-    #
-    # timestamp1 = time.time()
+# timestamp2 = time.time()
+# print ("This took %.2f seconds" % (timestamp2 - timestamp1))
+#
+# timestamp1 = time.time()
 
-    #
-    # timestamp2 = time.time()
-    # print("This took %.2f seconds" % (timestamp2 - timestamp1))
+#
+# timestamp2 = time.time()
+# print("This took %.2f seconds" % (timestamp2 - timestamp1))
 
-    # f = next_element
-    # print(f(1))
+# f = next_element
+# print(f(1))
 
-    # print(next_element(1))
+# print(next_element(1))
 
-    # mathFunctionCompiler()
+# mathFunctionCompiler()
 
-    # exec(mathFunctionCompiler(5 + 5))
-    # print(thunder(5))
+# exec(mathFunctionCompiler(5 + 5))
+# print(thunder(5))
 
-    # new_func = 'def ty(x):\n return x + 1'
-    # the_code = compile(new_func, 'test', 'exec')
-    # exec(the_code)
-    # print(ty(5))
+# new_func = 'def ty(x):\n return x + 1'
+# the_code = compile(new_func, 'test', 'exec')
+# exec(the_code)
+# print(ty(5))
 
 
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/
