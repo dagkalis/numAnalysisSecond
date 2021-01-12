@@ -18,133 +18,17 @@ pi = np.pi
 f = None
 
 
-class Matrix:
-    def __init__(self, original):
-        # fParent = first parent
-        # sParent = second >>
-        self.A = np.array(original, dtype=float)
-        self.L = None
-        self.U = None
-        self.P = None
-        self.choleskyL = None
-
-    def setLu(self, L, U):
-        self.L = L
-        self.U = U
-
-    # this is what is printed
-    def __str__(self):
-        return "A\n" + str(self.A) + "\n\nP\n" + str(self.P) + "\n\nU\n" + str(self.U) + "\n\nL\n" + str(
-            self.L) + "\n\ncholeskyL\n" + str(self.choleskyL) + "\n\n"
-
-    def print(self):
-        print("A\n", self.A)
-
-
-def PALU(matrix):
-    # check for existing matrix and if matrix is square
-    if matrix.A is None:
-        print("no matrix")
-        return
-    len1 = len(matrix.A)
-    len2 = len(matrix.A[0])
-    if len1 != len2:
-        print("matrix is not square")
-        return
-
-    # initialize U as copy of A
-    U = matrix.A.copy()
-
-    # set L as an array of 0
-
-    s = (len(U), len(U))
-    L = np.zeros(s, dtype=float)
-
-    # list to collect info about how to form P at the end
-    listForP = list()
-    # print(U, "\n\n")
-
-    # U iteration
-    for i in range(len(U)):
-        # first we find the correct row
-        rowOfMaxValue = i
-        for y in range(i, len(U), 1):
-            if abs(U[y][i]) > U[rowOfMaxValue][i]:
-                rowOfMaxValue = y
-        # swap rows in U
-        temp = list(U[i])
-        U[i] = U[rowOfMaxValue]
-        U[rowOfMaxValue] = temp
-        # swap rows is L
-        temp = list(L[i])
-        L[i] = L[rowOfMaxValue]
-        L[rowOfMaxValue] = temp
-        # keep info to later form P
-        listForP.append(rowOfMaxValue)
-
-        # make PU calculations
-        # Gauss calculations
-        for y in range(i + 1, len(U), 1):
-            factor = U[y][i] / U[i][i]
-            L[y][i] = factor
-            for z in range(i, len(U), 1):
-                U[y][z] -= factor * U[i][z]
-
-    # construct P according to listForP
-    P = np.identity(len(U))
-    for i in range(len(U)):
-        temp = list(P[i])
-        P[i] = P[listForP[i]]
-        P[listForP[i]] = temp
-
-    # add identity matrix to L
-    L += np.identity(len(U))
-    # set matrices for object
-    matrix.U = U
-    matrix.P = P
-    matrix.L = L
-
-
-def calculateVector(matrix, vector):
-    # checks if matrix A exists and if it is square
-    if matrix.A is None:
-        print("no matrix")
-        return
-    # len1 = len(matrix.A)
-    # len2 = len(matrix.A[0])
-    # if len1 != len2 or len(vector) != len1:
-    #     print("matrix is not square or vector not right")
-    #     return
-
-    # check if PALU is calculated
-    if matrix.U is None:
-        PALU(matrix)
-
-    # calculate vector for U
-    vector = matrix.U.dot(vector)
-    # print(vector)
-
-    # calculate vector for L
-    vector = matrix.L.dot(vector)
-    # print(vector)
-
-    # calculate vector for transpose of P
-    # vector = matrix.P.transpose().dot(vector)
-    vector = transp(matrix.P).dot(vector)
-    # print(vector)
-
-    return vector
-
-
 # accepts a function, the range and then makes a plot using all that
-def plotter(fun, array, x1, x2):
+def plotter(fun, array, dic, x1, x2):
     x = np.arange(x1, x2, 0.01)
     # y = zeros(len(x))
     # plt.plot(x, y)
     # plt.scatter(array, sin(array), color="black")
 
     plt.plot(x, fun(array, x), color="orange")
-    plt.plot(x, sin(x), color="black")
+    plt.plot(list(dic), list(dic.values()), color="black")
+
+    # plt.plot(x, sin(x), color="black")
 
     plt.show()
 
@@ -193,7 +77,7 @@ def Lagrange(x, points, function):
     return toReturn
 
 
-def LeastSquares(x, dic, degree):
+def LeastSquares(dic, degree):
     # initialize matrix and b list
     A = np.empty(shape=[len(dic), degree + 1], dtype=float)
     b = list()
@@ -249,84 +133,137 @@ def mkfun(vector, x):
         sum += vector[i] * (x ** i)
     return sum
 
-if __name__ == '__main__':
-    points = [2.9193,
-              -1.9475,
-              -1.379,
-              2.1096,
-              -0.2275,
-              0.0781,
-              1.1325,
-              2.7807,
-              -0.6981,
-              1.0045]
+def solveEydap(degree):
+    pointDic = {13: 74000,  # 07 / 2 / 2020
+                12: 75300,  # 06 / 2 / 2020
+                11: 75600,  # 05 / 2 / 2020
+                10: 75300,  # 04 / 2 / 2020
+                9: 74400,  # 03 / 2 / 2020
+                6: 74800,  # 30 / 1 / 2020
+                5: 76400,  # 29 / 1 / 2020
+                4: 76000,  # 28 / 1 / 2020
+                3: 76000,  # 27 / 1 / 2020
+                0: 76700  # 24 / 1 / 2020
+                }
 
-    # pointDic = {}
-    # pointDic = {-1: 1, 0: 0, 1: 0, 2: -2}
-    #
-    # array = np.array([[9., 3., 4.],
-    #                   [4., 3., 4.],
-    #                   [1., 1., 1.]])
-    # vector = [7, 8, 3]
-    #
-    # performGaussJordan(array, vector)
-
-    pointDic = {}
-    for i in range(len(points)):
-        pointDic[points[i]] = sin(points[i])
-
-    print(pointDic)
-
-    # print(LeastSquares(2, pointDic, 2))
-
-    results = LeastSquares(2, pointDic, 9)
+    results = LeastSquares(pointDic, 2)
     print(results)
 
-    plotter(mkfun, results, -pi, pi)
+    plotter(mkfun, results, pointDic, 0, 18)
+
+    print(list(pointDic))
+    print(list(pointDic.values()))
 
 
+if __name__ == '__main__':
 
+    # EYDAP
+    points = [74000,  # 07 / 2 / 2020
+              75300,  # 06 / 2 / 2020
+              75600,  # 05 / 2 / 2020
+              75300,  # 04 / 2 / 2020
+              74400,  # 03 / 2 / 2020
+              74800,  # 30 / 1 / 2020
+              76400,  # 29 / 1 / 2020
+              76000,  # 28 / 1 / 2020
+              76000,  # 27 / 1 / 2020
+              76700]  # 24 / 1 / 2020
 
+    solveEydap(4)
 
-
-    # print("\n\n")
-    # print(transp(LeastSquares(2, pointDic, 2, sin)))
+    # pointDic = {13: 74000,  # 07 / 2 / 2020
+    #             12: 75300,  # 06 / 2 / 2020
+    #             11: 75600,  # 05 / 2 / 2020
+    #             10: 75300,  # 04 / 2 / 2020
+    #             9: 74400,  # 03 / 2 / 2020
+    #             6: 74800,  # 30 / 1 / 2020
+    #             5: 76400,  # 29 / 1 / 2020
+    #             4: 76000,  # 28 / 1 / 2020
+    #             3: 76000,  # 27 / 1 / 2020
+    #             0: 76700  # 24 / 1 / 2020
+    #             }
     #
-    # for i in range(len(pointDic)):
-    #     print(i, list(pointDic.values())[i], " ")
+    # # pointDic = {}
+    # # for i in range(len(points)):
+    # #     pointDic[i] = points[i]
     #
+    # results = LeastSquares(pointDic, 3)
+    # print(results)
     #
+    # plotter(mkfun, results, pointDic, 0, 19)
+    #
+    # print(list(pointDic))
+    # print(list(pointDic.values()))
 
-# plotter(Lagrange, points, -1.5*pi,  1.5*pi )
+    if False:
+        points = [2.9193,
+                  -1.9475,
+                  -1.379,
+                  2.1096,
+                  -0.2275,
+                  0.0781,
+                  1.1325,
+                  2.7807,
+                  -0.6981,
+                  1.0045]
 
+        # pointDic = {}
+        # pointDic = {-1: 1, 0: 0, 1: 0, 2: -2}
+        #
+        # array = np.array([[9., 3., 4.],
+        #                   [4., 3., 4.],
+        #                   [1., 1., 1.]])
+        # vector = [7, 8, 3]
+        #
+        # performGaussJordan(array, vector)
 
-# functionString = 'def next_element(x):\n  return x+1'
-#
-# f = defMaker(  functionString)
+        pointDic = {}
+        for i in range(len(points)):
+            pointDic[points[i]] = sin(points[i])
 
-# timestamp2 = time.time()
-# print ("This took %.2f seconds" % (timestamp2 - timestamp1))
-#
-# timestamp1 = time.time()
+        # print(LeastSquares(2, pointDic, 2))
 
-#
-# timestamp2 = time.time()
-# print("This took %.2f seconds" % (timestamp2 - timestamp1))
+        results = LeastSquares(pointDic, 3)
+        print(results)
 
-# f = next_element
-# print(f(1))
+        plotter(mkfun, results, -pi, pi)
 
-# print(next_element(1))
+        # print("\n\n")
+        # print(transp(LeastSquares(2, pointDic, 2, sin)))
+        #
+        # for i in range(len(pointDic)):
+        #     print(i, list(pointDic.values())[i], " ")
+        #
+        #
 
-# mathFunctionCompiler()
+    # plotter(Lagrange, points, -1.5*pi,  1.5*pi )
 
-# exec(mathFunctionCompiler(5 + 5))
-# print(thunder(5))
+    # functionString = 'def next_element(x):\n  return x+1'
+    #
+    # f = defMaker(  functionString)
 
-# new_func = 'def ty(x):\n return x + 1'
-# the_code = compile(new_func, 'test', 'exec')
-# exec(the_code)
-# print(ty(5))
+    # timestamp2 = time.time()
+    # print ("This took %.2f seconds" % (timestamp2 - timestamp1))
+    #
+    # timestamp1 = time.time()
 
+    #
+    # timestamp2 = time.time()
+    # print("This took %.2f seconds" % (timestamp2 - timestamp1))
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    # f = next_element
+    # print(f(1))
+
+    # print(next_element(1))
+
+    # mathFunctionCompiler()
+
+    # exec(mathFunctionCompiler(5 + 5))
+    # print(thunder(5))
+
+    # new_func = 'def ty(x):\n return x + 1'
+    # the_code = compile(new_func, 'test', 'exec')
+    # exec(the_code)
+    # print(ty(5))
+
+    # See PyCharm help at https://www.jetbrains.com/help/pycharm/
