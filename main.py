@@ -21,15 +21,14 @@ f = None
 # accepts a function, the range and then makes a plot using all that
 def plotLeastSquares(dic: dict, degree: int, x1, x2):
     x = np.arange(x1, x2, 0.01)
-    # y = zeros(len(x))
-    # plt.plot(x, y)
-    # plt.scatter(array, sin(array), color="black")
 
     plt.plot(x, LeastSquares(dic, degree, x), color="orange")
 
-    plt.scatter(list(dic), list(dic.values()), color="black")
+    plt.plot(list(dic), list(dic.values()), color="black")
 
-    plt.plot(x, sin(x), color="blue")
+    # plt.scatter(list(dic), list(dic.values()), color="black")
+
+    # plt.plot(x, sin(x), color="blue")
 
     plt.show()
 
@@ -109,8 +108,8 @@ def LeastSquares(dic: dict, degree: int, x: float):
 
     matrixToCalculateWith = transp(A).dot(A)
     vectorToCalculateWith = transp(A).dot(b)
-    resultVector = performGaussJordan(matrixToCalculateWith, vectorToCalculateWith)
-    result = mkfun(resultVector, x)
+    resultList = performGaussJordan(matrixToCalculateWith, vectorToCalculateWith)
+    result = mkfun(resultList, x)
     return result
 
 
@@ -147,128 +146,115 @@ def mkfun(vector, x):
         sum += vector[i] * (x ** i)
     return sum
 
+
+class DayForecast:
+    def __init__(self, dayNum: int, date: str, original: float):
+        self.date = date
+        self.dayNum = dayNum
+        self.original = original
+        self.approximation = None
+
+    def diff(self):
+        if self.original is not None and self.approximation is not None:
+            return abs(self.original - self.approximation)
+        return None
+
+
+    # this is what is printed
+    def __str__(self):
+        string = "dayNum:" + str(self.dayNum) + "\ndate:" + str(self.date) + " original:" + str(
+            self.original) + " approximation:" + str(self.approximation)
+        diff = self.diff()
+        if diff is not None:
+            string += " diff:" + str(diff)
+        return string + "\n\n"
+
+
+
 def solveEydap(degree):
     # to learn
     # first point is equal to day 0
     # but day 2 is equal to 3 because it is 3 days after 0-day and so on
-    pointDic = {13: 74000,  # 07 / 2 / 2020
-                12: 75300,  # 06 / 2 / 2020
-                11: 75600,  # 05 / 2 / 2020
-                10: 75300,  # 04 / 2 / 2020
-                9: 74400,  # 03 / 2 / 2020
-                6: 74800,  # 30 / 1 / 2020
-                5: 76400,  # 29 / 1 / 2020
-                4: 76000,  # 28 / 1 / 2020
-                3: 76000,  # 27 / 1 / 2020
-                0: 76700  # 24 / 1 / 2020
-                }
+    dates = [  # dayNum,  date,   real value
+        DayForecast(20, "14/2/2020", 75300),
+        DayForecast(19, "13/2/2020", 74200),
+        DayForecast(18, "12/2/2020", 75200),
+        DayForecast(17, "11/2/2020", 74100),
+        DayForecast(16, "10/2/2020", 73200),
+        DayForecast(13, "07/2/2020", 74000),
+        DayForecast(12, "06/2/2020", 75300),
+        DayForecast(11, "05/2/2020", 75600),
+        DayForecast(10, "04/2/2020", 75300),
+        DayForecast(9 , "03/2/2020", 74400),
+        DayForecast(6 , "30/1/2020", 74800),
+        DayForecast(5 , "29/1/2020", 76400),
+        DayForecast(4 , "28/1/2020", 76000),
+        DayForecast(3 , "27/1/2020", 76000),
+        DayForecast(0 , "24/1/2020", 76700)
+    ]
+    # set appropriate order
+    dates.reverse()
 
-    # calucate LeastSquares with points we have for degree (parameter)
-    results = LeastSquares(pointDic, degree)
-    print(results)
+    # pointDic is the dictionaly LeastSquares is going to use to make the approximation
+    # we only give it the values up to 10
+    counter = 0
+    pointDic = {}
+    for i in dates:
+        if counter == 10:
+            break
+        pointDic[i.dayNum] = i.original
+        counter += 1
 
-    # make forecasts
-    forecasts = []
-    # days to forecast
-    # same logic to days-numbering as pointDic
-    forecastDays = [20,  # 14/2/2020
-                    19,  # 13/2/2020
-                    18,  # 12/2/2020
-                    17,  # 11/2/2020
-                    16]  # 10/2/2020
-    for i in range(len(forecastDays)):
-        forecasts.append(round(mkfun(results, forecastDays[i]), 6))
+    # get all approximations
+    for i in dates:
+        i.approximation = round(LeastSquares(pointDic, degree, i.dayNum), 5)
+    # print dates
+    for i in dates:
+        print(i)
 
-    print(forecasts)
 
-    daysDic = {20: "14 / 2 / 2020",
-               19: "13 / 2 / 2020",
-               18: "12 / 2 / 2020",
-               17: "11 / 2 / 2020",
-               16: "10 / 2 / 2020",
-               13: "07 / 2 / 2020",
-               12: "06 / 2 / 2020",
-               11: "05 / 2 / 2020",
-               10: "04 / 2 / 2020",
-               9: "03 / 2 / 2020",
-               6: "30 / 1 / 2020",
-               5: "29 / 1 / 2020",
-               4: "28 / 1 / 2020",
-               3: "27 / 1 / 2020",
-               0: "24 / 1 / 2020"}
-
-    plotLeastSquares(mkfun, results, pointDic, 0, 18)
+    plotLeastSquares(pointDic, degree, 0, 20)
 
 
 def solveKarel(degree):
-    # to learn
+    # make dates
     # first point is equal to day 0
     # but day 2 is equal to 3 because it is 3 days after 0-day and so on
-    dayCountTodayDic = {
-        0: '24/01/2020',
-        3: '27/01/2020',
-        4: '28/01/2020',
-        5: '29/01/2020',
-        6: '30/01/2020',
-        10: '03/02/2020',
-        11: '04/02/2020',
-        12: '05/02/2020',
-        13: '06/02/2020',
-        14: '07/02/2020',
-        17: '10/02/2020',
-        18: '11/02/2020',
-        19: '12/02/2020',
-        20: '13/02/2020',
-        21: '14/02/2020'}
+    dates = [    # dayNum,  date,   real value
+        DayForecast(20, "14/2/2020", None),
+        DayForecast(19, "13/2/2020", None),
+        DayForecast(18, "12/2/2020", None),
+        DayForecast(17, "11/2/2020", None),
+        DayForecast(16, "10/2/2020", None),
+        DayForecast(13, "07/2/2020", 2960000),
+        DayForecast(12, "06/2/2020", 3000000),
+        DayForecast(11, "05/2/2020", 3000000),
+        DayForecast(10, "04/2/2020", 3000000),
+        DayForecast(9 , "03/2/2020", 2980000),
+        DayForecast(6 , "30/1/2020", 2900000),
+        DayForecast(5 , "29/1/2020", 2920000),
+        DayForecast(4 , "28/1/2020", 2920000),
+        DayForecast(3 , "27/1/2020", 2920000),
+        DayForecast(0 , "24/1/2020", 2920000)
+    ]
+    # pointDic is the dictionaly LeastSquares is going to use to make the approximation
+    # we only give it the values up to 10
+    pointDic = {}
+    for i in dates:
+        if i.original is not None:
+            pointDic[i.dayNum] = i.original
+    # get all approximations for all days
+    for i in dates:
+        i.approximation = round(LeastSquares(pointDic, degree, i.dayNum),5)
 
-    pointDic = {
-        0: 2960000,
-        3: 3000000,
-        4: 3000000,
-        5: 3000000,
-        6: 2980000,
-        10: 2900000,
-        11: 2920000,
-        12: 2920000,
-        13: 2920000,
-        14: 2920000,
-    }
+    # for i in dates:
+    #     if i.original is None:
+    # print dates
+    for i in dates:
+        print(i)
 
-    # calucate LeastSquares with points we have for degree (parameter)
-    results = LeastSquares(pointDic, degree)
-    print(results)
-
-    # make forecasts
-    forecasts = []
-    # days to forecast
-    # same logic to days-numbering as pointDic
-    forecastDays = [17,  # 14/2/2020
-                    18,  # 13/2/2020
-                    19,  # 12/2/2020
-                    20,  # 11/2/2020
-                    21]  # 10/2/2020
-    for i in range(len(forecastDays)):
-        forecasts.append(round(mkfun(results, forecastDays[i]), 6))
-
-    print(forecasts)
-
-    daysDic = {20: "14 / 2 / 2020",
-               19: "13 / 2 / 2020",
-               18: "12 / 2 / 2020",
-               17: "11 / 2 / 2020",
-               16: "10 / 2 / 2020",
-               13: "07 / 2 / 2020",
-               12: "06 / 2 / 2020",
-               11: "05 / 2 / 2020",
-               10: "04 / 2 / 2020",
-               9: "03 / 2 / 2020",
-               6: "30 / 1 / 2020",
-               5: "29 / 1 / 2020",
-               4: "28 / 1 / 2020",
-               3: "27 / 1 / 2020",
-               0: "24 / 1 / 2020"}
-
-    plotLeastSquares(mkfun, results, pointDic, 0, 18)
+    # make a plot with everything
+    plotLeastSquares(pointDic, degree, 0, 20)
 
 
 def plotForDiffLagrange(points: list):
@@ -322,26 +308,30 @@ def plotForDiffLeastSquares(pointDic: dict, degree: int):
 
 if __name__ == '__main__':
 
-    points = [2.9193,
-              -1.9475,
-              -1.379,
-              2.1096,
-              -0.2275,
-              0.0781,
-              1.1325,
-              2.7807,
-              -0.6981,
-              1.0045]
+    solveEydap(3)
 
-    points.sort()
+    # No 5
+    if False:
+        points = [2.9193,
+                  -1.9475,
+                  -1.379,
+                  2.1096,
+                  -0.2275,
+                  0.0781,
+                  1.1325,
+                  2.7807,
+                  -0.6981,
+                  1.0045]
 
-    pointDic = {}
-    for i in range(len(points)):
-        pointDic[points[i]] = sin(points[i])
+        points.sort()
 
-    # plotLeastSquares(pointDic, 2, -pi, pi)
+        pointDic = {}
+        for i in range(len(points)):
+            pointDic[points[i]] = sin(points[i])
 
-    plotForDiffLeastSquares(pointDic, 2)
+        plotLeastSquares(pointDic, 2, -pi, pi)
+
+        plotForDiffLeastSquares(pointDic, 2)
 
     # pointDic = {}
     # pointsToTest = {}
@@ -388,4 +378,3 @@ if __name__ == '__main__':
     #
 
 # plotter(Lagrange, points, -1.5*pi,  1.5*pi )
-
