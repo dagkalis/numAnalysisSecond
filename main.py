@@ -193,17 +193,36 @@ def solveKarel(degree):
     # to learn
     # first point is equal to day 0
     # but day 2 is equal to 3 because it is 3 days after 0-day and so on
-    pointDic = {13: 74000,  # 07/2/2020
-                12: 75300,  # 06/2/2020
-                11: 75600,  # 05/2/2020
-                10: 75300,  # 04/2/2020
-                9: 74400,   # 03/2/2020
-                6: 74800,   # 30/1/2020
-                5: 76400,   # 29/1/2020
-                4: 76000,   # 28/1/2020
-                3: 76000,   # 27/1/2020
-                0: 76700    # 24/1/2020
-                }
+    dayCountTodayDic = {
+        0: '24/01/2020',
+        3: '27/01/2020',
+        4: '28/01/2020',
+        5: '29/01/2020',
+        6: '30/01/2020',
+        10: '03/02/2020',
+        11: '04/02/2020',
+        12: '05/02/2020',
+        13: '06/02/2020',
+        14: '07/02/2020',
+        17: '10/02/2020',
+        18: '11/02/2020',
+        19: '12/02/2020',
+        20: '13/02/2020',
+        21: '14/02/2020'}
+
+
+    pointDic = {
+                0:  2960000,
+                3: 3000000,
+                4: 3000000,
+                5: 3000000,
+                6: 2980000,
+                10: 2900000,
+                11: 2920000,
+                12: 2920000,
+                13: 2920000,
+                14: 2920000,
+    }
 
     # calucate LeastSquares with points we have for degree (parameter)
     results = LeastSquares(pointDic, degree)
@@ -213,11 +232,11 @@ def solveKarel(degree):
     forecasts = []
     # days to forecast
     # same logic to days-numbering as pointDic
-    forecastDays = [20,  # 14/2/2020
-                    19,  # 13/2/2020
-                    18,  # 12/2/2020
-                    17,  # 11/2/2020
-                    16]  # 10/2/2020
+    forecastDays = [17,  # 14/2/2020
+                    18,  # 13/2/2020
+                    19,  # 12/2/2020
+                    20,  # 11/2/2020
+                    21]  # 10/2/2020
     for i in range(len(forecastDays)):
         forecasts.append(round(mkfun(results, forecastDays[i]), 6))
 
@@ -248,7 +267,7 @@ if __name__ == '__main__':
 
 
 
-    solveEydap(3)
+    solveKarel(4)
 
 
 
