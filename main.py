@@ -19,7 +19,7 @@ f = None
 
 
 # accepts a function, the range and then makes a plot using all that
-def plotter(fun, array, dic, x1, x2):
+def plotLeastSquares(fun, array, dic, x1, x2):
     x = np.arange(x1, x2, 0.01)
     # y = zeros(len(x))
     # plt.plot(x, y)
@@ -30,6 +30,18 @@ def plotter(fun, array, dic, x1, x2):
 
     # plt.plot(x, sin(x), color="black")
 
+    plt.show()
+
+
+def plotLagrange(fun, array, x1, x2):
+    x = np.arange(x1, x2, 0.01)
+    plt.scatter(array, sin(array), color="black")
+
+    plt.plot(x, fun(array, x), color="orange")
+    # plt.plot(list(dic), list(dic.values()), color="black")
+
+    plt.plot(x, fun(x, points, sin), color="orange")
+    # plt.plot(x, sin(x), color="black")
     plt.show()
 
 
@@ -153,7 +165,6 @@ def solveEydap(degree):
     results = LeastSquares(pointDic, degree)
     print(results)
 
-
     # make forecasts
     forecasts = []
     # days to forecast
@@ -186,7 +197,7 @@ def solveEydap(degree):
 
 
 
-    plotter(mkfun, results, pointDic, 0, 18)
+    plotLeastSquares(mkfun, results, pointDic, 0, 18)
 
 
 def solveKarel(degree):
@@ -258,7 +269,7 @@ def solveKarel(degree):
                3: "27 / 1 / 2020",
                0: "24 / 1 / 2020"}
 
-    plotter(mkfun, results, pointDic, 0, 18)
+    plotLeastSquares(mkfun, results, pointDic, 0, 18)
 
 
 
@@ -267,21 +278,22 @@ if __name__ == '__main__':
 
 
 
-    solveKarel(4)
+    # solveKarel(4)
 
 
 
-    # points = [2.9193,
-    #           -1.9475,
-    #           -1.379,
-    #           2.1096,
-    #           -0.2275,
-    #           0.0781,
-    #           1.1325,
-    #           2.7807,
-    #           -0.6981,
-    #           1.0045]
+    points = [2.9193,
+              -1.9475,
+              -1.379,
+              2.1096,
+              -0.2275,
+              0.0781,
+              1.1325,
+              2.7807,
+              -0.6981,
+              1.0045]
 
+    plotLagrange(Lagrange, points, -1.5*pi,  1.5*pi)
 
     # pointDic = {}
     # pointDic = {-1: 1, 0: 0, 1: 0, 2: -2}
