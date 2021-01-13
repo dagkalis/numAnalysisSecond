@@ -37,12 +37,14 @@ def plotLagrange(fun, array, x1, x2):
     x = np.arange(x1, x2, 0.01)
     plt.scatter(array, sin(array), color="black")
 
-    plt.plot(x, fun(array, x), color="orange")
     # plt.plot(list(dic), list(dic.values()), color="black")
 
-    plt.plot(x, fun(x, points, sin), color="orange")
+    plt.plot(x, fun(x, array, sin), color="orange")
     # plt.plot(x, sin(x), color="black")
     plt.show()
+
+
+
 
 
 # gets a python function in string and dynamically compiles it
@@ -140,6 +142,7 @@ def performGaussJordan(array, vector):
 
 
 def mkfun(vector, x):
+    # type: (list, float) -> float
     sum = 0
     for i in range(len(vector)):
         sum += vector[i] * (x ** i)
@@ -178,6 +181,7 @@ def solveEydap(degree):
         forecasts.append(round(mkfun(results, forecastDays[i]), 6))
 
     print(forecasts)
+
 
     daysDic = {20: "14 / 2 / 2020",
                19: "13 / 2 / 2020",
@@ -272,13 +276,14 @@ def solveKarel(degree):
     plotLeastSquares(mkfun, results, pointDic, 0, 18)
 
 
+def plotForDiff(dic):
+
+    plt.plot(list(dic), list(dic.values()), color="black")
+
+    plt.show()
 
 
 if __name__ == '__main__':
-
-
-
-    # solveKarel(4)
 
 
 
@@ -293,7 +298,32 @@ if __name__ == '__main__':
               -0.6981,
               1.0045]
 
-    plotLagrange(Lagrange, points, -1.5*pi,  1.5*pi)
+
+
+    pointDic = {}
+    pointsToTest = {}
+    for i in range(len(points)):
+        pointDic[points[i]] = sin(points[i])
+
+    for i in np.arange(-pi, pi, 2 * pi / 200):
+        pointsToTest[i] = abs(sin(i) - LeastSquares(pointDic, 3))
+
+
+
+    plotLeastSquares(mkfun, results, pointDic, 0, 18)
+
+    # plotForDiff(pointsToTest)
+
+    # Lagrange
+    pointsToTest = {}
+    for i in np.arange(-pi, pi, 2 * pi / 200):
+        pointsToTest[i] = abs(sin(i) - Lagrange(i, points, sin))
+
+    # plotForDiff(pointsToTest)
+
+
+
+    # plotForDiff(Lagrange, points, -pi,  pi)
 
     # pointDic = {}
     # pointDic = {-1: 1, 0: 0, 1: 0, 2: -2}
