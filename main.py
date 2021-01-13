@@ -221,11 +221,11 @@ def solveKarel(degree):
     # first point is equal to day 0
     # but day 2 is equal to 3 because it is 3 days after 0-day and so on
     dates = [    # dayNum,  date,   real value
-        DayForecast(20, "14/2/2020", None),
-        DayForecast(19, "13/2/2020", None),
-        DayForecast(18, "12/2/2020", None),
-        DayForecast(17, "11/2/2020", None),
-        DayForecast(16, "10/2/2020", None),
+        DayForecast(20, "14/2/2020", 2980000),
+        DayForecast(19, "13/2/2020", 2980000),
+        DayForecast(18, "12/2/2020", 2980000),
+        DayForecast(17, "11/2/2020", 2900000),
+        DayForecast(16, "10/2/2020", 2920000),
         DayForecast(13, "07/2/2020", 2960000),
         DayForecast(12, "06/2/2020", 3000000),
         DayForecast(11, "05/2/2020", 3000000),
@@ -237,12 +237,19 @@ def solveKarel(degree):
         DayForecast(3 , "27/1/2020", 2920000),
         DayForecast(0 , "24/1/2020", 2920000)
     ]
+    dates.reverse()
+
     # pointDic is the dictionaly LeastSquares is going to use to make the approximation
     # we only give it the values up to 10
+    counter = 0
     pointDic = {}
     for i in dates:
-        if i.original is not None:
-            pointDic[i.dayNum] = i.original
+        if counter == 10:
+            break
+        pointDic[i.dayNum] = i.original
+        counter += 1
+
+
     # get all approximations for all days
     for i in dates:
         i.approximation = round(LeastSquares(pointDic, degree, i.dayNum),5)
@@ -250,8 +257,12 @@ def solveKarel(degree):
     # for i in dates:
     #     if i.original is None:
     # print dates
+    counter = 0
     for i in dates:
+        if counter == 10:
+            print ("\n\nfrom now on we have forecasts\n\n\n\n")
         print(i)
+        counter += 1
 
     # make a plot with everything
     plotLeastSquares(pointDic, degree, 0, 20)
@@ -308,7 +319,8 @@ def plotForDiffLeastSquares(pointDic: dict, degree: int):
 
 if __name__ == '__main__':
 
-    solveEydap(3)
+    solveKarel(4)
+
 
     # No 5
     if False:
