@@ -389,32 +389,3 @@ if __name__ == '__main__':
 
 # plotter(Lagrange, points, -1.5*pi,  1.5*pi )
 
-# functionString = 'def next_element(x):\n  return x+1'
-#
-# f = defMaker(  functionString)
-
-# timestamp2 = time.time()
-# print ("This took %.2f seconds" % (timestamp2 - timestamp1))
-#
-# timestamp1 = time.time()
-
-#
-# timestamp2 = time.time()
-# print("This took %.2f seconds" % (timestamp2 - timestamp1))
-
-# f = next_element
-# print(f(1))
-
-# print(next_element(1))
-
-# mathFunctionCompiler()
-
-# exec(mathFunctionCompiler(5 + 5))
-# print(thunder(5))
-
-# new_func = 'def ty(x):\n return x + 1'
-# the_code = compile(new_func, 'test', 'exec')
-# exec(the_code)
-# print(ty(5))
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
