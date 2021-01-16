@@ -24,9 +24,9 @@ def plotLeastSquares(dic: dict, degree: int, x1, x2):
 
     plt.plot(x, LeastSquares(dic, degree, x), color="orange")
 
-    plt.plot(list(dic), list(dic.values()), color="black")
+    # plt.plot(list(dic), list(dic.values()), color="black")
 
-    # plt.scatter(list(dic), list(dic.values()), color="black")
+    plt.scatter(list(dic), list(dic.values()), color="black")
 
     # plt.plot(x, sin(x), color="blue")
 
@@ -35,23 +35,24 @@ def plotLeastSquares(dic: dict, degree: int, x1, x2):
 
 def plotLagrange(array, x1, x2):
     x = np.arange(x1, x2, 0.01)
-    # plt.scatter(array, sin(array), color="black")
+    plt.scatter(array, sin(array), color="black")
 
     # plt.plot(list(dic), list(dic.values()), color="black")
 
+    # plt.plot(x, sin(x), color="black")
     plt.plot(x, Lagrange(x, array, sin), color="orange")
-    plt.plot(x, sin(x), color="black")
+
     plt.show()
 
 
 # gets a python function in string and dynamically compiles it
 # returns the python function (def)
-def defMaker(functionString):
-    d = {}
-    new_func = functionString
-    the_code = compile(new_func, 'test', 'exec')
-    exec(the_code, d)
-    return d['next_element']
+# def defMaker(functionString):
+#     d = {}
+#     new_func = functionString
+#     the_code = compile(new_func, 'test', 'exec')
+#     exec(the_code, d)
+#     return d['next_element']
 
 
 def transp(A):
@@ -106,9 +107,13 @@ def LeastSquares(dic: dict, degree: int, x: float):
         b.append((dic[i]))
         counter += 1
 
+    # calculate A^TA
     matrixToCalculateWith = transp(A).dot(A)
+    # calculate A^Tb
     vectorToCalculateWith = transp(A).dot(b)
+    # calculate with gauss-jordan
     resultList = performGaussJordan(matrixToCalculateWith, vectorToCalculateWith)
+    # use mkfun to calculate final-result
     result = mkfun(resultList, x)
     return result
 
@@ -152,6 +157,7 @@ class DayForecast:
         self.date = date
         self.dayNum = dayNum
         self.original = original
+        # will be set later
         self.approximation = None
 
     def diff(self):
@@ -282,10 +288,10 @@ def plotForDiffLagrange(points: list):
 
     # to review any of then uncomment the chosen and comment the other
 
-    # for key in pointsToTest.keys():
-    #     plt.plot([key, key], [0, pointsToTest[key]], color="blue")
+    for key in pointsToTest.keys():
+        plt.plot([key, key], [0, pointsToTest[key]], color="blue")
 
-    plt.scatter(list(pointsToTest), list(pointsToTest.values()), color="black")
+    # plt.scatter(list(pointsToTest), list(pointsToTest.values()), color="black")
 
     # prints the max and min diff between lagrange and sin
     print("max diff:", max(pointsToTest.values()), " min diff:", min(pointsToTest.values()))
@@ -316,34 +322,53 @@ def plotForDiffLeastSquares(pointDic: dict, degree: int):
 
     plt.show()
 
+def solveSinWithLeastSquares(points: list, degree: int):
+    points.sort()
+
+    # leastSquares for sin
+    pointDic = {}
+    for i in range(len(points)):
+        pointDic[points[i]] = sin(points[i])
+
+    plotLeastSquares(pointDic, degree, -pi, pi)
+
+    plotForDiffLeastSquares(pointDic, degree)
+
+def solveSinWithLagrange(points: list):
+
+    plotLagrange(points, -pi, pi)
+
+    plotForDiffLagrange(points)
+
+
 
 if __name__ == '__main__':
 
-    solveKarel(4)
+    # Execise 5
+    points = [2.9193,
+              -1.9475,
+              -1.379,
+              2.1096,
+              -0.2275,
+              0.0781,
+              1.1325,
+              2.7807,
+              -2.99,
+              1.0045]
+
+    # 1)
+    # solveSinWithLagrange(points)
+    # 3)
+    # solveSinWithLeastSquares(points, 2)
 
 
-    # No 5
-    if False:
-        points = [2.9193,
-                  -1.9475,
-                  -1.379,
-                  2.1096,
-                  -0.2275,
-                  0.0781,
-                  1.1325,
-                  2.7807,
-                  -0.6981,
-                  1.0045]
+    # Exerice 7
 
-        points.sort()
+    # solveKarel(4)
 
-        pointDic = {}
-        for i in range(len(points)):
-            pointDic[points[i]] = sin(points[i])
+    # solveEydap(3)
 
-        plotLeastSquares(pointDic, 2, -pi, pi)
 
-        plotForDiffLeastSquares(pointDic, 2)
 
     # pointDic = {}
     # pointsToTest = {}
