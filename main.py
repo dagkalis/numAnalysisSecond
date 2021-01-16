@@ -178,26 +178,26 @@ class DayForecast:
 
 
 def solveEydap(degree):
-    # to learn
-    # first point is equal to day 0
-    # but day 2 is equal to 3 because it is 3 days after 0-day and so on
+    # make dates
     dates = [  # dayNum,  date,   real value
-        DayForecast(20, "14/2/2020", 75300),
-        DayForecast(19, "13/2/2020", 74200),
-        DayForecast(18, "12/2/2020", 75200),
-        DayForecast(17, "11/2/2020", 74100),
-        DayForecast(16, "10/2/2020", 73200),
-        DayForecast(13, "07/2/2020", 74000),
-        DayForecast(12, "06/2/2020", 75300),
-        DayForecast(11, "05/2/2020", 75600),
-        DayForecast(10, "04/2/2020", 75300),
-        DayForecast(9 , "03/2/2020", 74400),
-        DayForecast(6 , "30/1/2020", 74800),
-        DayForecast(5 , "29/1/2020", 76400),
-        DayForecast(4 , "28/1/2020", 76000),
-        DayForecast(3 , "27/1/2020", 76000),
-        DayForecast(0 , "24/1/2020", 76700)
+        DayForecast(15, "14/2/2020", 75300),
+        DayForecast(14, "13/2/2020", 74200),
+        DayForecast(13, "12/2/2020", 75200),
+        DayForecast(12, "11/2/2020", 74100),
+        DayForecast(11, "10/2/2020", 73200),
+        DayForecast(10, "07/2/2020", 74000),
+        DayForecast(9 , "06/2/2020", 75300),
+        DayForecast(8 , "05/2/2020", 75600),
+        DayForecast(7 , "04/2/2020", 75300),
+        DayForecast(6 , "03/2/2020", 74400),
+        DayForecast(5 , "30/1/2020", 74800),
+        DayForecast(4 , "29/1/2020", 76400),
+        DayForecast(3 , "28/1/2020", 76000),
+        DayForecast(2 , "27/1/2020", 76000),
+        DayForecast(1 , "24/1/2020", 76700)
     ]
+
+
     # set appropriate order
     dates.reverse()
 
@@ -219,30 +219,45 @@ def solveEydap(degree):
         print(i)
 
 
-    plotLeastSquares(pointDic, degree, 0, 20)
+    plotLeastSquares(pointDic, degree, 0, 15)
 
 
 def solveKarel(degree):
     # make dates
-    # first point is equal to day 0
-    # but day 2 is equal to 3 because it is 3 days after 0-day and so on
     dates = [    # dayNum,  date,   real value
-        DayForecast(20, "14/2/2020", 2980000),
-        DayForecast(19, "13/2/2020", 2980000),
-        DayForecast(18, "12/2/2020", 2980000),
-        DayForecast(17, "11/2/2020", 2900000),
-        DayForecast(16, "10/2/2020", 2920000),
-        DayForecast(13, "07/2/2020", 2960000),
-        DayForecast(12, "06/2/2020", 3000000),
-        DayForecast(11, "05/2/2020", 3000000),
-        DayForecast(10, "04/2/2020", 3000000),
-        DayForecast(9 , "03/2/2020", 2980000),
-        DayForecast(6 , "30/1/2020", 2900000),
-        DayForecast(5 , "29/1/2020", 2920000),
-        DayForecast(4 , "28/1/2020", 2920000),
-        DayForecast(3 , "27/1/2020", 2920000),
-        DayForecast(0 , "24/1/2020", 2920000)
+        DayForecast(15, "14/2/2020", 2980000),
+        DayForecast(14, "13/2/2020", 2980000),
+        DayForecast(13, "12/2/2020", 2980000),
+        DayForecast(12, "11/2/2020", 2900000),
+        DayForecast(11, "10/2/2020", 2920000),
+        DayForecast(10, "07/2/2020", 2960000),
+        DayForecast(9 , "06/2/2020", 3000000),
+        DayForecast(8 , "05/2/2020", 3000000),
+        DayForecast(7 , "04/2/2020", 3000000),
+        DayForecast(6 , "03/2/2020", 2980000),
+        DayForecast(5 , "30/1/2020", 2900000),
+        DayForecast(4 , "29/1/2020", 2920000),
+        DayForecast(3 , "28/1/2020", 2920000),
+        DayForecast(2 , "27/1/2020", 2920000),
+        DayForecast(1 , "24/1/2020", 2920000)
     ]
+
+    # | 14/2/2020 | 2980000 | 3021575.75758 | 41575.757579999976 |
+    # | 13/2/2020 | 2980000 | 3017090.90909 | 37090.909090000205 |
+    # | 12/2/2020 | 2980000 | 3012000.0 | 32000.0 |
+    # | 11/2/2020 | 2900000 | 3006303.0303 | 106303.03030000022 |
+    # | 10/2/2020 | 2920000 | 3000000.0 | 80000.0 |
+    # | 07/2/2020 | 2960000 | 2993090.90909 | 33090.909090000205 |
+    # | 06/2/2020 | 3000000 | 2985575.75758 | 14424.242420000024 |
+    # | 05/2/2020 | 3000000 | 2977454.54545 | 22545.454549999908 |
+    # | 04/2/2020 | 3000000 | 2968727.27273 | 31272.72727000015 |
+    # | 03/2/2020 | 2980000 | 2959393.93939 | 20606.060610000044 |
+    # | 30/1/2020 | 2900000 | 2949454.54545 | 49454.54545000009 |
+    # | 29/1/2020 | 2920000 | 2938909.09091 | 18909.090909999795 |
+    # | 28/1/2020 | 2920000 | 2927757.57576 | 7757.57575999992 |
+    # | 27/1/2020 | 2920000 | 2916000.0 | 4000.0 |
+    # | 24/1/2020 | 2920000 | 2903636.36364 | 16363.636359999888 |
+
     dates.reverse()
 
     # pointDic is the dictionaly LeastSquares is going to use to make the approximation
@@ -271,7 +286,7 @@ def solveKarel(degree):
         counter += 1
 
     # make a plot with everything
-    plotLeastSquares(pointDic, degree, 0, 20)
+    plotLeastSquares(pointDic, degree, 0, 15)
 
 
 def plotForDiffLagrange(points: list):
@@ -359,14 +374,14 @@ if __name__ == '__main__':
     # 1)
     # solveSinWithLagrange(points)
     # 3)
-    # solveSinWithLeastSquares(points, 2)
+    # solveSinWithLeastSquares(points, 3)
 
 
     # Exerice 7
 
-    # solveKarel(4)
+    solveKarel(2)
 
-    # solveEydap(3)
+    # solveEydap(2)
 
 
 
