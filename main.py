@@ -242,22 +242,6 @@ def solveKarel(degree):
         DayForecast(1 , "24/1/2020", 2920000)
     ]
 
-    # | 14/2/2020 | 2980000 | 3021575.75758 | 41575.757579999976 |
-    # | 13/2/2020 | 2980000 | 3017090.90909 | 37090.909090000205 |
-    # | 12/2/2020 | 2980000 | 3012000.0 | 32000.0 |
-    # | 11/2/2020 | 2900000 | 3006303.0303 | 106303.03030000022 |
-    # | 10/2/2020 | 2920000 | 3000000.0 | 80000.0 |
-    # | 07/2/2020 | 2960000 | 2993090.90909 | 33090.909090000205 |
-    # | 06/2/2020 | 3000000 | 2985575.75758 | 14424.242420000024 |
-    # | 05/2/2020 | 3000000 | 2977454.54545 | 22545.454549999908 |
-    # | 04/2/2020 | 3000000 | 2968727.27273 | 31272.72727000015 |
-    # | 03/2/2020 | 2980000 | 2959393.93939 | 20606.060610000044 |
-    # | 30/1/2020 | 2900000 | 2949454.54545 | 49454.54545000009 |
-    # | 29/1/2020 | 2920000 | 2938909.09091 | 18909.090909999795 |
-    # | 28/1/2020 | 2920000 | 2927757.57576 | 7757.57575999992 |
-    # | 27/1/2020 | 2920000 | 2916000.0 | 4000.0 |
-    # | 24/1/2020 | 2920000 | 2903636.36364 | 16363.636359999888 |
-
     dates.reverse()
 
     # pointDic is the dictionaly LeastSquares is going to use to make the approximation
@@ -345,13 +329,13 @@ def solveSinWithLeastSquares(points: list, degree: int):
     for i in range(len(points)):
         pointDic[points[i]] = sin(points[i])
 
-    plotLeastSquares(pointDic, degree, -pi, pi)
+    # plotLeastSquares(pointDic, degree, -pi, pi)
 
     plotForDiffLeastSquares(pointDic, degree)
 
 def solveSinWithLagrange(points: list):
 
-    plotLagrange(points, -pi, pi)
+    # plotLagrange(points, -pi, pi)
 
     plotForDiffLagrange(points)
 
@@ -374,59 +358,13 @@ if __name__ == '__main__':
     # 1)
     # solveSinWithLagrange(points)
     # 3)
-    # solveSinWithLeastSquares(points, 3)
+    solveSinWithLeastSquares(points, 3)
 
 
     # Exerice 7
 
-    solveKarel(2)
+    # solveKarel(4)
 
     # solveEydap(2)
 
 
-
-    # pointDic = {}
-    # pointsToTest = {}
-    # for i in range(len(points)):
-    #     pointDic[points[i]] = sin(points[i])
-    #
-    # for i in np.arange(-pi, pi, 2 * pi / 200):
-    #     pointsToTest[i] = abs(sin(i) - LeastSquares(pointDic, 3))
-
-    # plotForDiff(pointsToTest)
-
-    #
-    # plotForDiff(pointsToTest)
-
-    # plotForDiff(Lagrange, points, -pi,  pi)
-
-    # pointDic = {}
-    # pointDic = {-1: 1, 0: 0, 1: 0, 2: -2}
-    #
-    # array = np.array([[9., 3., 4.],
-    #                   [4., 3., 4.],
-    #                   [1., 1., 1.]])
-    # vector = [7, 8, 3]
-    #
-    # performGaussJordan(array, vector)
-
-    # pointDic = {}
-    # for i in range(len(points)):
-    #     pointDic[points[i]] = sin(points[i])
-    #
-    # # print(LeastSquares(2, pointDic, 2))
-    #
-    # results = LeastSquares(pointDic, 3)
-    # print(results)
-    #
-    # plotter(mkfun, results, -pi, pi)
-
-    # print("\n\n")
-    # print(transp(LeastSquares(2, pointDic, 2, sin)))
-    #
-    # for i in range(len(pointDic)):
-    #     print(i, list(pointDic.values())[i], " ")
-    #
-    #
-
-# plotter(Lagrange, points, -1.5*pi,  1.5*pi )
